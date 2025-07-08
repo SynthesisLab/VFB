@@ -1,0 +1,94 @@
+{
+    "positive_traces": [
+        {
+            "a0": [
+                0,
+                1,
+                1,
+                0
+            ],
+            "a1": [
+                0,
+                1,
+                0,
+                1
+            ]
+        }
+    ],
+    "negative_traces": [
+        {
+            "a0": [
+                1,
+                1,
+                1,
+                0
+            ],
+            "a1": [
+                0,
+                1,
+                0,
+                1
+            ]
+        },
+        {
+            "a0": [
+                0,
+                1,
+                1,
+                0
+            ],
+            "a1": [
+                0,
+                1,
+                1,
+                1
+            ]
+        },
+        {
+            "a0": [
+                0,
+                1,
+                1,
+                1
+            ],
+            "a1": [
+                0,
+                1,
+                0,
+                1
+            ]
+        },
+        {
+            "a0": [
+                0,
+                1,
+                1,
+                0
+            ],
+            "a1": [
+                0,
+                1,
+                0,
+                0
+            ]
+        }
+    ],
+    "smallest_known_formula": "",
+    "generating_formula": "",
+    "generating_seed": "",
+    "original_repository": "https://github.com/MojtabaValizadeh/ltl-learning-on-gpus",
+    "name": "",
+    "atomic_propositions": [
+        "a0",
+        "a1"
+    ],
+    "parameters": {
+        "delta": 42
+    },
+    "number_atomic_propositions": 2,
+    "number_traces": 5,
+    "number_positive_traces": 1,
+    "number_negative_traces": 4,
+    "max_length_traces": 4,
+    "trace_type": "finite"
+}
