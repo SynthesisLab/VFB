@@ -166,12 +166,6 @@ struct StackEntry {
   int shift;
 };
 
-__device__ void printFormula(int size, char formula[maxFormulaSize]) {
-  for (int i = 0; i < size; ++i)
-    printf("%c ", formula[i]);
-  printf("\n");
-}
-
 __device__ void numberToFormula(uint64_t n, int size,
                                 char formula[maxFormulaSize]) {
 
@@ -251,14 +245,6 @@ __global__ void processOperator(int LTLLen, uint64_t maxTid, uint64_t offset,
   }
 }
 
-void printMatrix(uint64_t *matrix, int m, int n) {
-  for (int i = 0; i < m; ++i) {
-    for (int j = 0; j < n; ++j)
-      printf("%-12lu ", matrix[i * n + j]);
-    printf("\n");
-  }
-}
-
 uint64_t *generateMatrix(int maxLen) {
 
   // Last column is the number of formulas of the given size
@@ -297,7 +283,6 @@ uint64_t *generateMatrix(int maxLen) {
         notCommutBinaryForm; // Total number of formulas of size i
   }
 
-  // printMatrix(numForm, maxLen + 1, 9);
   return numForm;
 }
 
@@ -339,24 +324,26 @@ string LTL(const int maxLen, uint64_t *inputData, int *traceLen,
   // --------------------------------------
 
   if (maxLen > maxFormulaSize) {
-    printf("This version supports formulas of size at most %d.\n",
-           maxFormulaSize);
+    fprintf(stderr, "This version supports formulas of size at most %d.\n",
+            maxFormulaSize);
     return "see_the_error";
   }
 
   if (numOfTraces > maxNumOfTraces) {
-    printf("This version supports at most %d samples.\n", maxNumOfTraces);
+    fprintf(stderr, "This version supports at most %d samples.\n",
+            maxNumOfTraces);
     return "see_the_error";
   }
 
   if (numVar > maxNumOfVars) {
-    printf("This version supports at most %d variables.\n", maxNumOfVars);
+    fprintf(stderr, "This version supports at most %d variables.\n",
+            maxNumOfVars);
     return "see_the_error";
   }
 
   if (traceLength > maxTraceLength) {
-    printf("This version supports traces of size at most %d.\n",
-           maxTraceLength);
+    fprintf(stderr, "This version supports traces of size at most %d.\n",
+            maxTraceLength);
     return "see_the_error";
   }
 
@@ -373,8 +360,9 @@ string LTL(const int maxLen, uint64_t *inputData, int *traceLen,
   uint64_t allLTLs{};
 
   // Checking variables as potential solution
-  printf("Length %-2d | Vars | CheckedLTLs: %-13lu | ToBeChecked: %-12d \n", 1,
-         allLTLs, numVar);
+  fprintf(stderr,
+          "Length %-2d | Vars | CheckedLTLs: %-13lu | ToBeChecked: %-12d \n", 1,
+          allLTLs, numVar);
   bool found;
   for (int i = 0; i < numVar; ++i) {
     found = true;
@@ -420,8 +408,10 @@ string LTL(const int maxLen, uint64_t *inputData, int *traceLen,
 
       N = numForm[LTLLen * 8 + i];
       blockSize = (N + 1023) / 1024;
-      printf("Length %-2d | %-4s | CheckedLTLs: %-13lu | ToBeChecked: %-12lu\n",
-             LTLLen, opStr[i], allLTLs, N);
+      fprintf(
+          stderr,
+          "Length %-2d | %-4s | CheckedLTLs: %-13lu | ToBeChecked: %-12lu\n",
+          LTLLen, opStr[i], allLTLs, N);
       if (N > 0)
         processOperator<<<blockSize, 1024>>>(LTLLen, N, offset, d_LTLFormula,
                                              d_foundFlag);
@@ -462,18 +452,20 @@ int main(int argc, char *argv[]) {
   // -----------------
 
   if (argc != 3) {
-    printf("Arguments should be in the form of\n");
-    printf(
+    fprintf(stderr, "Arguments should be in the form of\n");
+    fprintf(
+        stderr,
         "-----------------------------------------------------------------\n");
-    printf("%s <input_file_address> <maxLen>\n", argv[0]);
-    printf(
+    fprintf(stderr, "%s <input_file_address> <maxLen>\n", argv[0]);
+    fprintf(
+        stderr,
         "-----------------------------------------------------------------\n");
     return 0;
   }
 
   if (atoi(argv[2]) < 1 || atoi(argv[2]) > 50) {
-    printf("Argument maxLen = %s should be between 1 and %d", argv[2],
-           maxFormulaSize);
+    fprintf(stderr, "Argument maxLen = %s should be between 1 and %d", argv[2],
+            maxFormulaSize);
     return 0;
   }
 
@@ -489,7 +481,7 @@ int main(int argc, char *argv[]) {
   if (output == "see_the_error")
     return 0;
 
-  printf("\nLTL: \"%s\"\n", output.c_str());
+  printf("LTL: \"%s\"", output.c_str());
 
   return 0;
 }
