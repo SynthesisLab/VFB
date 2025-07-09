@@ -481,7 +481,7 @@ int main(int argc, char *argv[]) {
   if (output == "see_the_error")
     return 0;
 
-  printf("LTL: \"%s\"", output.c_str());
+  printf("%s, %s\n", fileName.c_str(), output.c_str());
 
   return 0;
 }
